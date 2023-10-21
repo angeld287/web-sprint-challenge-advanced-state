@@ -46,7 +46,11 @@ export function inputChange(form) {
 export function resetForm() { 
   return {
     type: RESET_FORM,
-    payload: 0
+    payload: {
+      newQuestion: '',
+      newTrueAnswer: '',
+      newFalseAnswer: '',
+    }
   }
 }
 
@@ -68,6 +72,7 @@ export function fetchQuiz() {
     dispatch(setQuiz((await result.json())))
   }
 }
+
 export function postAnswer(quizId, answerId) {
   return async function (dispatch) {
     // On successful POST:
@@ -102,10 +107,11 @@ export function postAnswer(quizId, answerId) {
     dispatch(setQuiz((await fetchResult.json())))
   }
 }
+
 export function postQuiz(questionText, trueAnswerText, falseAnswerText) {
   return async function (dispatch) {
     // On successful POST:
-    const result = await fetch("http://localhost:9000/api/quiz/new", {
+    await fetch("http://localhost:9000/api/quiz/new", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +120,7 @@ export function postQuiz(questionText, trueAnswerText, falseAnswerText) {
     });
 
     // - Dispatch the correct message to the the appropriate state
-    dispatch(setMessage((await result.json()).message))
+    dispatch(setMessage(`Congrats: "${questionText}" is a great question!`))
     // - Dispatch the resetting of the form
     dispatch(resetForm())
   }
