@@ -82,8 +82,24 @@ export function postAnswer(quizId, answerId) {
     // - Dispatch an action to reset the selected answer state
     dispatch(selectAnswer(null))
     // - Dispatch an action to set the server message to state
-    dispatch(setMessage((await result.json())))
+    dispatch(setMessage((await result.json()).message))
+
+
     // - Dispatch the fetching of the next quiz
+    // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
+
+    dispatch(setQuiz(null));
+
+    // On successful GET:
+    const fetchResult = await fetch("http://localhost:9000/api/quiz/next", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    // - Dispatch an action to send the obtained quiz to its state
+    dispatch(setQuiz((await fetchResult.json())))
   }
 }
 export function postQuiz(questionText, trueAnswerText, falseAnswerText) {
@@ -98,7 +114,7 @@ export function postQuiz(questionText, trueAnswerText, falseAnswerText) {
     });
 
     // - Dispatch the correct message to the the appropriate state
-    dispatch(setMessage((await result.json())))
+    dispatch(setMessage((await result.json()).message))
     // - Dispatch the resetting of the form
     dispatch(resetForm())
   }
