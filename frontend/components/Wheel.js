@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { moveClockwise, moveCounterClockwise } from '../state/action-creators'
 
 
 
 function Wheel(props) {
-
-  useEffect(() => console.log(props.wheel), [props.wheel])
 
   const moveClockwise = (e) => {
     e.preventDefault();

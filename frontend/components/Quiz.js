@@ -4,7 +4,7 @@ import { fetchQuiz, selectAnswer, postAnswer } from '../state/action-creators'
 
 function Quiz(props) {
   useEffect(() => {
-    props.fetchQuiz();
+    if(props.quiz === null) props.fetchQuiz();
   }, []);
 
   const selectAnswer = (e, answerId) => {
@@ -28,7 +28,7 @@ function Quiz(props) {
               {props.quiz.answers.map(answer => <div key={answer.answer_id} className={`answer ${props.selectedAnswer === answer.answer_id ? 'selected' : ''}`}>
                 {answer.text}
                 <button onClick={e => selectAnswer(e, answer.answer_id)}>
-                  SELECTED
+                  {props.selectedAnswer === answer.answer_id ? 'SELECTED' : 'Select'}
                 </button>
               </div>)}
             </div>

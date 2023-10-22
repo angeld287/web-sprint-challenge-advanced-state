@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 import {inputChange, postQuiz} from '../state/action-creators'
 
@@ -18,13 +18,17 @@ export function Form(props) {
     props.postQuiz(newQuestion, newTrueAnswer, newFalseAnswer);
   }
 
+  const buttonDisabled = useMemo(() => {
+    return newQuestion.trim() === '' || newTrueAnswer.trim() === '' || newFalseAnswer.trim() === ''
+  }, [newQuestion, newTrueAnswer, newFalseAnswer])
+
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
       <input maxLength={50} onChange={onChange} value={newQuestion} id="newQuestion" placeholder="Enter question" />
       <input maxLength={50} onChange={onChange} value={newTrueAnswer} id="newTrueAnswer" placeholder="Enter true answer" />
       <input maxLength={50} onChange={onChange} value={newFalseAnswer} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn" type="submit" disabled={newQuestion === '' || newTrueAnswer === '' || newFalseAnswer === ''}>Submit new quiz</button>
+      <button id="submitNewQuizBtn" type="submit" disabled={buttonDisabled}>Submit new quiz</button>
     </form>
   )
 }
